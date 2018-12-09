@@ -16,7 +16,14 @@ require('./auth/auth')
 
 
 
+// app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.json({ type: 'application/*+json' }))
+
+// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 const routes = require('./routes/routes')
 const secureRoute = require('./routes/secure-routes')
