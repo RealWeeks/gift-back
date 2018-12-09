@@ -11,7 +11,8 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  groups: [{ type: Schema.Types.ObjectId, ref: 'group' }]
 })
 
 // This is called a pre-hook, before the user information is saved in the database

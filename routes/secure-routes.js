@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 const Model = require('../models/model')
-// const UserModel = Model.UserModel
+const UserModel = Model.UserModel
 const GroupModel = Model.GroupModel
 
 // Lets say the route below is very sensitive and we want only authorized users to have access
@@ -19,8 +19,8 @@ router.get('/profile', (req, res, next) => {
 })
 
 router.post('/creategroup', async (req, res) => {
-  console.log(req.body)
-  console.log(req.user)
+  // console.log(req.body)
+  // console.log(req.user)
   const group = new GroupModel({
     name: req.body.groupname,
     founder: req.user._id,
@@ -28,6 +28,9 @@ router.post('/creategroup', async (req, res) => {
   group.members.push(req.user._id)
   try {
     let newGroup = await group.save()
+    let user = await UserModel.findOne({email: req.user.email})
+    user.groups.push(newGroup._id)
+    let userGroups = await user.save() // eslint-disable-line no-unused-vars
     res.json({status: 'created', group_details: newGroup})
   } catch (error) {
     res.status(400).send(error)
