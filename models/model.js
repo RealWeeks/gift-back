@@ -38,6 +38,7 @@ UserSchema.methods.isValidPassword = async function (password) {
 }
 
 const GroupSchema = Schema({
+  _id: Schema.Types.ObjectId,
   founder: { type: Schema.Types.ObjectId, ref: 'user' },
   name: String,
   members: [{ type: Schema.Types.ObjectId, ref: 'user' }]
