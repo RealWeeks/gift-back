@@ -1,6 +1,6 @@
 const passport = require('passport')
 const localStrategy = require('passport-local').Strategy
-const UserModel = require('../models/model')
+const Model = require('../models/model')
 
 // Create a passport middleware to handle user registration
 passport.use('signup', new localStrategy({ // eslint-disable-line new-cap
@@ -9,7 +9,7 @@ passport.use('signup', new localStrategy({ // eslint-disable-line new-cap
 }, async (email, password, done) => {
   try {
     // Save the information provided by the user to the the database
-    const user = await UserModel.create({ email, password })
+    const user = await Model.UserModel.create({ email, password })
     // Send the user information to the next middleware
     return done(null, user)
   } catch (error) {
@@ -24,7 +24,7 @@ passport.use('login', new localStrategy({ // eslint-disable-line new-cap
 }, async (email, password, done) => {
   try {
     // Find the user associated with the email provided by the user
-    const user = await UserModel.findOne({ email })
+    const user = await Model.UserModel.findOne({ email })
     if (!user) {
       // If the user isn't found in the database, return a message
       return done(null, false, {message: 'User not found'})

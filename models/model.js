@@ -37,6 +37,13 @@ UserSchema.methods.isValidPassword = async function (password) {
   return compare
 }
 
-const UserModel = mongoose.model('user', UserSchema)
+const GroupSchema = Schema({
+  founder: { type: Schema.Types.ObjectId, ref: 'user' },
+  name: String,
+  members: [{ type: Schema.Types.ObjectId, ref: 'user' }]
+})
 
-module.exports = UserModel
+const UserModel = mongoose.model('user', UserSchema)
+const GroupModel = mongoose.model('group', GroupSchema)
+
+module.exports = {UserModel, GroupModel}
