@@ -19,8 +19,6 @@ router.get('/profile', (req, res, next) => {
 })
 
 router.post('/creategroup', async (req, res) => {
-  // console.log(req.body)
-  // console.log(req.user)
   const group = new GroupModel({
     name: req.body.groupname,
     founder: req.user._id,
@@ -31,10 +29,26 @@ router.post('/creategroup', async (req, res) => {
     let user = await UserModel.findOne({email: req.user.email})
     user.groups.push(newGroup._id)
     let userGroups = await user.save() // eslint-disable-line no-unused-vars
-    res.json({status: 'created', group_details: newGroup})
+    res.json({status: 'created group', group_details: newGroup})
   } catch (error) {
     res.status(400).send(error)
   }
+})
+
+router.get('/groups', async (req, res) => {
+  try {
+    let user = await UserModel.findOne({email: req.user.email})
+      .populate({path: 'groups', select: 'name members', populate: { path: 'members', select: 'email' }})
+
+    res.json({status: 'success', groups: user.groups})
+  } catch (error) {
+    res.status(400).send(error)
+  }
+  res.json({
+    message: 'You made it to the secure route',
+    user: req.user,
+    token: req.query.secret_token
+  })
 })
 
 module.exports = router
